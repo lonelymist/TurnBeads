@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7771752148944245465}
   - component: {fileID: 1692287955011611398}
   m_Layer: 0
-  m_Name: dark
+  m_Name: Fire
   m_TagString: Dark
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -69,7 +69,7 @@ SpriteRenderer:
   m_SortingLayerID: -1118182329
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: dfea79c57ccf43a42adb387bed063f69, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0a2a7d58d057d3d47b8c63b3c019dc7b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -92,10 +92,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42c83c1e68c1c3468a8bd0b275edda8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BallsType:
-  - {fileID: 21300000, guid: 0a2a7d58d057d3d47b8c63b3c019dc7b, type: 3}
-  - {fileID: 21300000, guid: 1d3c42f769bb670438e8e8c5d9731983, type: 3}
-  - {fileID: 21300000, guid: 48fe909a584be764ea3aa92574f6105e, type: 3}
-  - {fileID: 21300000, guid: c46779ebcb6bc2d45be6b7e5ef3a6a0a, type: 3}
-  - {fileID: 21300000, guid: dfea79c57ccf43a42adb387bed063f69, type: 3}
-  - {fileID: 21300000, guid: 45657e559a87b1d43b3002323a24dd09, type: 3}

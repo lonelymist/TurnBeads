@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\01.Script\Balls.cs" />
+    <Compile Include="Assets\01.Script\BallsSystem.cs" />
     <Compile Include="Assets\Breads.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/謝青芫/Documents/Github/TurnBeads/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
