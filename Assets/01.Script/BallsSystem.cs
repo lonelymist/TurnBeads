@@ -35,11 +35,9 @@ public class BallsSystem : MonoBehaviour
     void CreateNewBall(int x,int y)
     {
         GameObject newBall = Instantiate(Resources.Load<GameObject>("Ball"));
-        // 設定新磚塊，從Resource裡複製一個磚塊
+        // 設定新珠子 從Resource裡複製一個珠子
 
         newBall.transform.position = new Vector2(NewBallPositionX(x), NewBallPositionY(y));
-        // 設定它的座標為 剛剛設定好的
-
         BallNumber.Add(newBall.transform);
         // 然後把它加進Bricks陣列
     }
@@ -52,29 +50,21 @@ public class BallsSystem : MonoBehaviour
         {
             default:
                 ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[0];
-                ThisBall.tag = "Fire";
-                // 改變珠子的sprite tag
-
                 break;
             case 1:
                 ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[1];
-                ThisBall.tag = "Water";
                 break;
             case 2:
                 ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[2];
-                ThisBall.tag = "Wood";
                 break;
             case 3:
                 ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[3];
-                ThisBall.tag = "Light";
                 break;
             case 4:
                 ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[4];
-                ThisBall.tag = "Dark";
                 break;
             case 5:
                 ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[5];
-                ThisBall.tag = "Heart";
                 break;
         }
     }
