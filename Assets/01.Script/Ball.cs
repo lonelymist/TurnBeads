@@ -10,6 +10,8 @@ public class Ball : MonoBehaviour
     void OnMouseDrag()
     {
         newPos = cam.ScreenToWorldPoint(Input.mousePosition);
+        newPos.x = Mathf.Clamp(newPos.x, -5.9f , 5.85f);
+        newPos.y = Mathf.Clamp(newPos.y, -8.25f, 2.15f);
         transform.position = new Vector2(newPos.x, newPos.y);
     }
     void OnMouseUp()
