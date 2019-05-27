@@ -6,6 +6,10 @@ public class BallsSystem : MonoBehaviour
 {
     public List<Sprite> BallsType;
     // 宣告不同種珠子Sprite的list
+    private List<Transform> BallNumber = new List<Transform>(30);
+    // 宣告珠子Transform的list
+    private int count = 0;
+    // 用來計算第幾個珠子
     void Start()
     {
         for(int i=0; i < 6; i++)
@@ -13,6 +17,8 @@ public class BallsSystem : MonoBehaviour
             for(int j = 0; j < 5; j++)
             {
                 CreateNewBall(i,j);
+                ChangeSprite(BallNumber[count].gameObject);
+                count++;
             }
         }
     }
@@ -29,6 +35,7 @@ public class BallsSystem : MonoBehaviour
         GameObject newBall = Instantiate(Resources.Load<GameObject>("Ball"));
         // 設定新珠子 從Resource裡複製一個珠子
         newBall.transform.position = new Vector2(NewBallPositionX(x), NewBallPositionY(y));
+        BallNumber.Add(newBall.transform);
     }
     void ChangeSprite(GameObject ThisBall)
     {
