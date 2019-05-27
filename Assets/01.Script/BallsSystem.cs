@@ -7,7 +7,7 @@ public class BallsSystem : MonoBehaviour
     public List<Sprite> BallsType;
     // 宣告不同種珠子Sprite的list
 
-    public List<Transform> BallNumber;
+    private List<Transform> BallNumber = new List<Transform>(30);
     // 宣告珠子編號Transform的list
 
     void Start()
@@ -22,7 +22,6 @@ public class BallsSystem : MonoBehaviour
                 Count++;
             }
         }
-        
     }
     float NewBallPositionX(int x)
     {

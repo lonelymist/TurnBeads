@@ -6,7 +6,25 @@ public class Ball : MonoBehaviour
 {
     private Camera cam;
     private Vector2 newPos;
-    private Vector2 iniPos;
+    private Vector3 iniPos;
+    private Vector3 Temp;
+    private bool Moving;
+    void Start()
+    {
+        iniPos = transform.position;
+        cam = Camera.main;
+    }
+    void Update()
+    {
+        if (transform.position == iniPos)
+        {
+            Moving = false;
+        }
+        else
+        {
+            Moving = true;
+        }
+    }
     void OnMouseDrag()
     {
         newPos = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -18,9 +36,13 @@ public class Ball : MonoBehaviour
     {
         transform.position = iniPos;
     }
-    void Start()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        iniPos = transform.position;
-        cam = Camera.main;
+        if (Moving)
+        {
+            Temp = iniPos;
+            iniPos = other.transform.position;
+            other.transform.position = Temp;
+        }
     }
 }
