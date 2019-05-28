@@ -23,21 +23,15 @@ public class Ball : MonoBehaviour
     }
     void Update()
     {
-        if (transform.position == iniPos)
-            // 如果目前位置等於初始位置
+        if (!Moving)
         {
-            Moving = false;
-            // 就是沒在移動
-        }
-        else
-        {
-            Moving = true;
-            // 不等於就是在移動
+            iniPos = transform.position;
         }
     }
     void OnMouseDrag()
     // 滑鼠再拖移時
     {
+        Moving = true;
         GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.7f);
         // 將當前物件調整為稍微透明
         newPos = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -52,12 +46,13 @@ public class Ball : MonoBehaviour
     void OnMouseUp()
         //滑鼠放開時
     {
+        Moving = false;
         GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
         // 將顏色復原
         transform.position = iniPos;
         // 回歸初始位置
     }
-    private void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerEnter2D(Collider2D other)
         // 撞到其他物件時
     {
         if (Moving && other.gameObject.tag=="Ball")

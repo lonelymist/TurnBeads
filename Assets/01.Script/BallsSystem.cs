@@ -10,6 +10,7 @@ public class BallsSystem : MonoBehaviour
     // 宣告珠子Transform的list
     private int count = 0;
     // 用來計算第幾個珠子
+    private Ball ball;
     void Start()
     {
         for(int i=0; i < 6; i++)
