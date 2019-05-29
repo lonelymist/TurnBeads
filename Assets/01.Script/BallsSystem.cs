@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class BallsSystem : MonoBehaviour
 {
     public List<Sprite> BallsType;
@@ -37,6 +39,11 @@ public class BallsSystem : MonoBehaviour
         // 設定新珠子 從Resource裡複製一個珠子
         newBall.transform.position = new Vector2(NewBallPositionX(x), NewBallPositionY(y));
         BallNumber.Add(newBall.transform);
+    }
+
+    public void AllCheckLink()
+    {
+       
     }
     void ChangeSprite(GameObject ThisBall)
     {
