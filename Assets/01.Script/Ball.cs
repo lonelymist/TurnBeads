@@ -14,6 +14,14 @@ public class Ball : MonoBehaviour
     // 等等互換值 用來暫存
     private bool Moving;
     // 判斷是否在移動
+    public RaycastHit2D[] hitsR;
+    //設定右側碰撞
+    public RaycastHit2D[] hitsL;
+    //設定左側碰撞
+    public RaycastHit2D[] hitsU;
+    //設定上側碰撞
+    public RaycastHit2D[] hitsD;
+    //設定下側碰撞
     void Start()
     {
         iniPos = transform.position;
@@ -51,6 +59,82 @@ public class Ball : MonoBehaviour
         // 將顏色復原
         transform.position = iniPos;
         // 回歸初始位置
+        CheckLink();
+    }
+    void CheckLink()
+    {
+        hitsR = Physics2D.LinecastAll(transform.position, transform.position + transform.right * 10);
+        //向右射出隱形射線(初始值,很遠很遠的地方)
+        hitsL = Physics2D.LinecastAll(transform.position, transform.position - transform.right * 10);
+        //向左射出隱形射線(初始值,很遠很遠的地方)
+        hitsU = Physics2D.LinecastAll(transform.position, transform.position + transform.up * 10);
+        //向上射出隱形射線(初始值,很遠很遠的地方)
+        hitsD = Physics2D.LinecastAll(transform.position, transform.position - transform.up * 10);
+        //向下射出隱形射線(初始值,很遠很遠的地方)
+        foreach (RaycastHit2D hit in hitsR)
+        {
+            if(hit.collider.GetComponent<SpriteRenderer>().sprite == GetComponent<SpriteRenderer>().sprite)
+            //如果碰到的圖案跟自己一樣
+            {
+                hit.collider.GetComponent<Ball>().Fade();
+                //讓球消失
+            }
+            else
+            {
+                break;
+            }
+
+
+        }
+        foreach (RaycastHit2D hit in hitsL)
+        {
+            if (hit.collider.GetComponent<SpriteRenderer>().sprite == GetComponent<SpriteRenderer>().sprite)
+            //如果碰到的圖案跟自己一樣
+            {
+                hit.collider.GetComponent<Ball>().Fade();
+                //讓球消失
+            }
+            else
+            {
+                break;
+            }
+
+
+        }
+        foreach (RaycastHit2D hit in hitsU)
+        {
+            if (hit.collider.GetComponent<SpriteRenderer>().sprite == GetComponent<SpriteRenderer>().sprite)
+            //如果碰到的圖案跟自己一樣
+            {
+                hit.collider.GetComponent<Ball>().Fade();
+                //讓球消失
+            }
+            else
+            {
+                break;
+            }
+
+
+        }
+        foreach (RaycastHit2D hit in hitsD)
+        {
+            if (hit.collider.GetComponent<SpriteRenderer>().sprite == GetComponent<SpriteRenderer>().sprite)
+            //如果碰到的圖案跟自己一樣
+            {
+                hit.collider.GetComponent<Ball>().Fade();
+                //讓球消失
+            }
+            else
+            {
+                break;
+            }
+
+
+        }
+    }
+    void Fade()
+    {
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
     }
     void OnTriggerEnter2D(Collider2D other)
         // 撞到其他物件時
