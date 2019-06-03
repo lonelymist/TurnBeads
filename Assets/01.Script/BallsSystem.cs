@@ -12,7 +12,8 @@ public class BallsSystem : MonoBehaviour
     // 宣告珠子Transform的list
     private int count = 0;
     // 用來計算第幾個珠子
-    private Ball ball;
+    private Vector3 EachPosition;
+    Sprite nowSprite;
     void Start()
     {
         for(int i=0; i < 6; i++)
@@ -43,11 +44,11 @@ public class BallsSystem : MonoBehaviour
     public void AllCheckLink()
     {
        foreach(GameObject EachBall in BallNumber)
-        {
+       {
             int horCount = 0;
             int verCount = 0;
-            Vector3 EachPosition = EachBall.transform.position;
-            Sprite nowSprite = EachBall.GetComponent<SpriteRenderer>().sprite;
+            EachPosition = EachBall.transform.position;
+            nowSprite = EachBall.GetComponent<SpriteRenderer>().sprite;
             RaycastHit2D[] hitsR = Physics2D.LinecastAll(EachPosition, EachPosition + EachBall.transform.right * 10);
             //向右射出隱形射線(初始值,很遠很遠的地方)
             RaycastHit2D[] hitsL = Physics2D.LinecastAll(EachPosition, EachPosition - EachBall.transform.right * 10);
@@ -146,6 +147,26 @@ public class BallsSystem : MonoBehaviour
                     else
                     {
                         break;
+                    }
+                }
+            }
+        }
+    }
+    public void MoveToTop()
+    {
+        foreach (GameObject EachBall in BallNumber)
+        {
+            if(EachBall.GetComponent<SpriteRenderer>().color == new Color( 1, 1, 1, 0f))
+            {
+                //ChangeSprite(EachBall);
+                EachBall.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                EachPosition = EachBall.transform.position;
+                for (int j = 0; j < 5; j++)
+                {
+                    if (EachPosition.y + 2.6f * j > 2.14f)
+                    {
+                        int i = j + 1;
+                        EachBall.transform.position = new Vector2(EachPosition.x , EachPosition.y + 2.6f * i) ;
                     }
                 }
             }

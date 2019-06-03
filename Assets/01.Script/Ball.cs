@@ -53,6 +53,7 @@ public class Ball : MonoBehaviour
         transform.position = iniPos;
         // 回歸初始位置
         GameObject.Find("BallsSystem").SendMessage("AllCheckLink");
+        GameObject.Find("BallsSystem").SendMessage("MoveToTop");
     }
     void OnTriggerEnter2D(Collider2D other)
         // 撞到其他物件時
