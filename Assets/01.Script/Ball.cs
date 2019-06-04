@@ -52,7 +52,9 @@ public class Ball : MonoBehaviour
         transform.position = iniPos;
         // 回歸初始位置
         GameObject.Find("BallsSystem").SendMessage("AllCheckLink");
+        // 執行BallsSystem 的AllCheckLink
         GameObject.Find("BallsSystem").SendMessage("FallSystem");
+        // 執行BallsSystem 的FallSystem
     }
     void OnTriggerEnter2D(Collider2D other)
         // 撞到其他物件時

@@ -156,9 +156,11 @@ public class BallsSystem : MonoBehaviour
     public void FallSystem()
     {
         int i = 0;
+        // 計數用
         foreach (GameObject EachBall in BallNumber)
         {
             if(EachBall.GetComponent<SpriteRenderer>().color == new Color( 1, 1, 1, 0f))
+                // 如果是被消掉的珠子
             {
                 ChangeSprite(EachBall);
                 EachBall.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
