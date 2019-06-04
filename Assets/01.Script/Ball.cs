@@ -28,7 +28,6 @@ public class Ball : MonoBehaviour
             iniPos = transform.position;
         }
     }
-  
     void OnMouseDrag()
     // 滑鼠再拖移時
     {
@@ -53,7 +52,7 @@ public class Ball : MonoBehaviour
         transform.position = iniPos;
         // 回歸初始位置
         GameObject.Find("BallsSystem").SendMessage("AllCheckLink");
-        GameObject.Find("BallsSystem").SendMessage("MoveToTop");
+        GameObject.Find("BallsSystem").SendMessage("FallSystem");
     }
     void OnTriggerEnter2D(Collider2D other)
         // 撞到其他物件時
