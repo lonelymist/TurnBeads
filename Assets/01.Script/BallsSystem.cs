@@ -14,7 +14,7 @@ public class BallsSystem : MonoBehaviour
     // 用來計算第幾個珠子
     private Vector3 EachPosition;
     Sprite nowSprite;
-    public List<float> no;
+    public List<Vector2> no;
     void Start()
     {
         for(int i=0; i < 6; i++)
@@ -178,35 +178,34 @@ public class BallsSystem : MonoBehaviour
         i = 0;
         foreach (GameObject EachBall in BallNumber)
         {
-            RaycastHit2D[] FallD = Physics2D.LinecastAll(EachBall.transform.position, EachBall.transform.position - EachBall.transform.up * 20);
-            if (FallD.Length == 1)
+            EachPosition = EachBall.transform.position;
+            RaycastHit2D[] FallD = Physics2D.LinecastAll(EachPosition,  new Vector2(EachPosition.x,-10f));
+            switch (FallD.Length)
             {
-                no[i] = -8.25f;
-            }
-            else if (FallD.Length == 2)
-            {
-                no[i] = -5.65f;
-            }
-            else if (FallD.Length == 3)
-            {
-                no[i] = -3.05f;
-            }
-            else if (FallD.Length == 4)
-            {
-                no[i] = -0.45f;
-            }
-            else if (FallD.Length == 5)
-            {
-                no[i] = 2.15f;
+                default:
+                    no[i] = new Vector2(EachPosition.x, -8.25f);
+                    break;
+                case 2:
+                    no[i] = new Vector2(EachPosition.x, -5.65f);
+                    break;
+                case 3:
+                    no[i] = new Vector2(EachPosition.x, -3.05f);
+                    break;
+                case 4:
+                    no[i] = new Vector2(EachPosition.x, -0.45f);
+                    break;
+                case 5:
+                    no[i] = new Vector2(EachPosition.x, 2.15f);
+                    break;
             }
             i++;
         }
         i = 0;
-        foreach (GameObject EachBall in BallNumber)
+        /*foreach (GameObject EachBall in BallNumber)
         {
-            EachBall.transform.position = new Vector2(EachBall.transform.position.x, no[i]);
+            EachBall.transform.position = no[i];
             i++;
-        }
+        }*/
     }
     void ChangeSprite(GameObject ThisBall)
     {
