@@ -1,0 +1,2 @@
+C:\Users\謝青芫\Documents\Github\TurnBeads\obj\Debug\Assembly-CSharp.csprojAssemblyReference.cache
+C:\Users\謝青芫\Documents\Github\TurnBeads\obj\Debug\Assembly-CSharp.csproj.CoreCompileInputs.cache

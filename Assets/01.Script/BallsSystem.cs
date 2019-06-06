@@ -6,43 +6,70 @@ using UnityEngine;
 
 public class BallsSystem : MonoBehaviour
 {
-    public List<Sprite> BallsType;
+    [SerializeField]
+    private List<Sprite> BallsType = new List<Sprite>(6);
     // 宣告不同種珠子Sprite的list
+    [SerializeField]
     private List<GameObject> BallNumber = new List<GameObject>(30);
     // 宣告珠子Transform的list
     private int count = 0;
     // 用來計算第幾個珠子
     private Vector3 EachPosition;
-    Sprite nowSprite;
-    public List<Vector2> no;
+    private Sprite nowSprite;
     void Start()
     {
-        for(int i=0; i < 6; i++)
+        for(int i=0; i < 5; i++)
         {
-            for(int j = 0; j < 5; j++)
+            for(int j = 0; j < 6; j++)
             {
-                CreateNewBall(i,j);
+                CreateNewBall(j,i);
                 ChangeSprite(BallNumber[count]);
                 count++;
             }
         }
     }
-    float NewBallPositionX(int x)
+    private float NewBallPositionX(int x)
     {
         return -5.9f + 2.35f * x;
     }
-    float NewBallPositionY(int y)
+    private float NewBallPositionY(int y)
     {
         return 2.15f - 2.6f * y;
     }
-    void CreateNewBall(int x,int y)
+    private void CreateNewBall(int x,int y)
     {
         GameObject newBall = Instantiate(Resources.Load<GameObject>("Ball"));
         // 設定新珠子 從Resource裡複製一個珠子
         newBall.transform.position = new Vector2(NewBallPositionX(x), NewBallPositionY(y));
         BallNumber.Add(newBall);
     }
-    public void AllCheckLink()
+    private void ChangeSprite(GameObject ThisBall)
+    {
+        int type = Random.Range(0, 6);
+        // 設定隨機變數
+        switch (type)
+        {
+            default:
+                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[0];
+                break;
+            case 1:
+                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[1];
+                break;
+            case 2:
+                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[2];
+                break;
+            case 3:
+                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[3];
+                break;
+            case 4:
+                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[4];
+                break;
+            case 5:
+                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[5];
+                break;
+        }
+    }
+    private void AllCheckLink()
     {
        foreach(GameObject EachBall in BallNumber)
        {
@@ -153,84 +180,44 @@ public class BallsSystem : MonoBehaviour
             }
         }
     }
-    public void FallSystem()
+    private void FallSystem()
     {
-        int i = 0;
-        // 計數用
-        foreach (GameObject EachBall in BallNumber)
+        foreach(GameObject EachBall in BallNumber)
+        // 將被消除的珠子清空
         {
-            if(EachBall.GetComponent<SpriteRenderer>().color == new Color( 1, 1, 1, 0f))
-                // 如果是被消掉的珠子
+            if (EachBall.GetComponent<SpriteRenderer>().color == new Color(1, 1, 1, 0f))
+            {
+                EachBall.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
+                EachBall.GetComponent<SpriteRenderer>().sprite = null;
+            }
+        }
+        for(int i = BallNumber.Count - 1; i > 5; i--)
+        // 橫向珠子掉落到底
+        {
+            if (BallNumber[i].GetComponent<SpriteRenderer>().sprite == null
+                && BallNumber[i-6].GetComponent<SpriteRenderer>().sprite != null)
+            {
+                BallNumber[i].GetComponent<SpriteRenderer>().sprite = BallNumber[i-6].GetComponent<SpriteRenderer>().sprite;
+                BallNumber[i - 6].GetComponent<SpriteRenderer>().sprite = null;
+            }
+        }
+        for(int i = 6; i < BallNumber.Count - 6; i++)
+        // 直向珠子掉落到底
+        {
+            if (BallNumber[i + 6].GetComponent<SpriteRenderer>().sprite == null
+                && BallNumber[i].GetComponent<SpriteRenderer>().sprite != null)
+            {
+                BallNumber[i + 6].GetComponent<SpriteRenderer>().sprite = BallNumber[i].GetComponent<SpriteRenderer>().sprite;
+                BallNumber[i].GetComponent<SpriteRenderer>().sprite = null;
+            }
+        }
+        foreach (GameObject EachBall in BallNumber)
+        // 被消除的重新生成
+        {
+            if (EachBall.GetComponent<SpriteRenderer>().sprite == null)
             {
                 ChangeSprite(EachBall);
-                EachBall.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
-                EachPosition = EachBall.transform.position;
-                for (int j = 0; j < 5; j++)
-                {
-                    if (EachPosition.y + 2.6f * j > 2.14f)
-                    {
-                        i = j + 1;
-                        EachBall.transform.position = new Vector2(EachPosition.x , EachPosition.y + 2.6f * i) ;
-                    }
-                }
             }
-        }
-        i = 0;
-        foreach (GameObject EachBall in BallNumber)
-        {
-            EachPosition = EachBall.transform.position;
-            RaycastHit2D[] FallD = Physics2D.LinecastAll(EachPosition,  new Vector2(EachPosition.x,-10f));
-            switch (FallD.Length)
-            {
-                default:
-                    no[i] = new Vector2(EachPosition.x, -8.25f);
-                    break;
-                case 2:
-                    no[i] = new Vector2(EachPosition.x, -5.65f);
-                    break;
-                case 3:
-                    no[i] = new Vector2(EachPosition.x, -3.05f);
-                    break;
-                case 4:
-                    no[i] = new Vector2(EachPosition.x, -0.45f);
-                    break;
-                case 5:
-                    no[i] = new Vector2(EachPosition.x, 2.15f);
-                    break;
-            }
-            i++;
-        }
-        i = 0;
-        /*foreach (GameObject EachBall in BallNumber)
-        {
-            EachBall.transform.position = no[i];
-            i++;
-        }*/
-    }
-    void ChangeSprite(GameObject ThisBall)
-    {
-        int type = Random.Range(0, 6);
-        // 設定隨機變數
-        switch (type)
-        {
-            default:
-                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[0];
-                break;
-            case 1:
-                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[1];
-                break;
-            case 2:
-                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[2];
-                break;
-            case 3:
-                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[3];
-                break;
-            case 4:
-                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[4];
-                break;
-            case 5:
-                ThisBall.GetComponent<SpriteRenderer>().sprite = BallsType[5];
-                break;
         }
     }
 }
