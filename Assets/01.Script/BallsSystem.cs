@@ -10,6 +10,7 @@ public class BallsSystem : MonoBehaviour
     private List<GameObject> AllBall = new List<GameObject>();
     private int removeCountH, removeCountV;
     private int i, j;
+    private bool checkLink;
     void Start()
     {
         for(i = 0; i < 5; i++)
@@ -65,6 +66,7 @@ public class BallsSystem : MonoBehaviour
     }
     private void GroupBall()
     {
+        checkLink = false;
         for (i = 0; i < AllBall.Count; i++ )
         {
             removeCountH = 1;
@@ -104,9 +106,13 @@ public class BallsSystem : MonoBehaviour
             if (removeCountH >= 3 || removeCountV >= 3)
             {
                 AllBall[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+                checkLink = true;
             }
         }
-        removeBall();
+        if (checkLink)
+        {
+            removeBall();
+        }
     }
     private void removeBall()
     {
@@ -118,5 +124,32 @@ public class BallsSystem : MonoBehaviour
                 ball.GetComponent<SpriteRenderer>().sprite = null;
             }
         }
+        FallSystem();
+    }
+    private void FallSystem()
+    {
+        for(j = 0; j < 4; j++)
+        {
+            for (i = AllBall.Count - 1; i >= 6; i--)
+            {
+                if (AllBall[i].GetComponent<SpriteRenderer>().sprite == null)
+                {
+                    AllBall[i].GetComponent<SpriteRenderer>().sprite = AllBall[i - 6].GetComponent<SpriteRenderer>().sprite;
+                    AllBall[i - 6].GetComponent<SpriteRenderer>().sprite = null;
+                }
+            }
+        }
+        ReCreate();
+    }
+    private void ReCreate()
+    {
+        foreach(GameObject ball in AllBall)
+        {
+            if(ball.GetComponent<SpriteRenderer>().sprite == null)
+            {
+                ChangeSprite(ball);
+            }
+        }
+        GroupBall();
     }
 }
