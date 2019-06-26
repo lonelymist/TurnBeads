@@ -11,6 +11,8 @@ public class BallsSystem : MonoBehaviour
     private int removeCountH, removeCountV;
     private int i, j;
     private bool checkLink;
+    private float timer;
+    private bool startRemove = false;
     void Start()
     {
         for(i = 0; i < 5; i++)
@@ -66,6 +68,7 @@ public class BallsSystem : MonoBehaviour
     }
     private void GroupBall()
     {
+        timer = Time.time;
         checkLink = false;
         for (i = 0; i < AllBall.Count; i++ )
         {
@@ -111,7 +114,7 @@ public class BallsSystem : MonoBehaviour
         }
         if (checkLink)
         {
-            removeBall();
+            startRemove = true;
         }
     }
     private void removeBall()
@@ -124,7 +127,6 @@ public class BallsSystem : MonoBehaviour
                 ball.GetComponent<SpriteRenderer>().sprite = null;
             }
         }
-        FallSystem();
     }
     private void FallSystem()
     {
@@ -139,7 +141,6 @@ public class BallsSystem : MonoBehaviour
                 }
             }
         }
-        ReCreate();
     }
     private void ReCreate()
     {
@@ -151,5 +152,24 @@ public class BallsSystem : MonoBehaviour
             }
         }
         GroupBall();
+    }
+    void FixedUpdate()
+    {
+        if (startRemove)
+        {
+            if(Time.time - timer > 0.5)
+            {
+                removeBall();
+            }
+            if (Time.time - timer > 1)
+            {
+                FallSystem();
+            }
+            if (Time.time - timer > 1.5)
+            {
+                startRemove = false;
+                ReCreate();
+            }
+        }
     }
 }
