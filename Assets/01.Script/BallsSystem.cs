@@ -2,30 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class BallsSystem : MonoBehaviour
 {
     [SerializeField]
-    private List<Sprite> BallsType = new List<Sprite>(6);
-    // 宣告不同種珠子Sprite的list
+    private List<Sprite> BallsType = new List<Sprite>();
     [SerializeField]
-    private List<GameObject> BallNumber = new List<GameObject>(30);
-    // 宣告珠子Transform的list
-    private int count = 0;
-    // 用來計算第幾個珠子
-    private Vector3 EachPosition;
-    private Sprite nowSprite;
+    private List<GameObject> AllBall = new List<GameObject>();
+    private int removeCountH, removeCountV;
+    private int i, j;
     void Start()
     {
-        for(int i=0; i < 5; i++)
+        for(i = 0; i < 5; i++)
         {
-            for(int j = 0; j < 6; j++)
+            for(j = 0; j < 6; j++)
             {
                 CreateNewBall(j,i);
-                ChangeSprite(BallNumber[count]);
-                count++;
             }
+        }
+        foreach(GameObject ball in AllBall)
+        {
+            ChangeSprite(ball);
         }
     }
     private float NewBallPositionX(int x)
@@ -39,14 +35,12 @@ public class BallsSystem : MonoBehaviour
     private void CreateNewBall(int x,int y)
     {
         GameObject newBall = Instantiate(Resources.Load<GameObject>("Ball"));
-        // 設定新珠子 從Resource裡複製一個珠子
         newBall.transform.position = new Vector2(NewBallPositionX(x), NewBallPositionY(y));
-        BallNumber.Add(newBall);
+        AllBall.Add(newBall);
     }
     private void ChangeSprite(GameObject ThisBall)
     {
         int type = Random.Range(0, 6);
-        // 設定隨機變數
         switch (type)
         {
             default:
@@ -69,154 +63,59 @@ public class BallsSystem : MonoBehaviour
                 break;
         }
     }
-    private void AllCheckLink()
+    private void GroupBall()
     {
-       foreach(GameObject EachBall in BallNumber)
-       {
-            int horCount = 0;
-            int verCount = 0;
-            EachPosition = EachBall.transform.position;
-            nowSprite = EachBall.GetComponent<SpriteRenderer>().sprite;
-            RaycastHit2D[] hitsR = Physics2D.LinecastAll(EachPosition, EachPosition + EachBall.transform.right * 10);
-            //向右射出隱形射線(初始值,很遠很遠的地方)
-            RaycastHit2D[] hitsL = Physics2D.LinecastAll(EachPosition, EachPosition - EachBall.transform.right * 10);
-            //向左射出隱形射線(初始值,很遠很遠的地方)
-            RaycastHit2D[] hitsU = Physics2D.LinecastAll(EachPosition, EachPosition + EachBall.transform.up * 10);
-            //向上射出隱形射線(初始值,很遠很遠的地方)
-            RaycastHit2D[] hitsD = Physics2D.LinecastAll(EachPosition, EachPosition - EachBall.transform.up * 10);
-            //向下射出隱形射線(初始值,很遠很遠的地方)
-            for (int i = 0; i < hitsR.Length; i++)
+        for (i = 0; i < AllBall.Count; i++ )
+        {
+            removeCountH = 1;
+            removeCountV = 1;
+            // 上
+            j = i - 6;
+            while (j >= 0 && AllBall[j].GetComponent<SpriteRenderer>().sprite == AllBall[i].GetComponent<SpriteRenderer>().sprite)
             {
-                if (hitsR[i].collider.GetComponent<SpriteRenderer>().sprite != nowSprite)
+                removeCountV++;
+                j =  j - 6;
+            }
+            // 右
+            j = i + 1;
+            while (j % 6 != 0 && AllBall[j].GetComponent<SpriteRenderer>().sprite == AllBall[i].GetComponent<SpriteRenderer>().sprite)
+            {
+                removeCountH++;
+                j++;
+            }
+            // 下
+            j = i + 6;
+            while (j <= 29 && AllBall[j].GetComponent<SpriteRenderer>().sprite == AllBall[i].GetComponent<SpriteRenderer>().sprite)
+            {
+                removeCountV++;
+                j = j + 6;
+            }
+            // 左
+            j = i - 1;
+            while (i % 6 != 0 && AllBall[j].GetComponent<SpriteRenderer>().sprite == AllBall[i].GetComponent<SpriteRenderer>().sprite)
+            {
+                removeCountH++;
+                if (j % 6 == 0)
                 {
                     break;
                 }
-                horCount++;
+                j--;
             }
-            for (int j = 0; j < hitsL.Length; j++)
+            if (removeCountH >= 3 || removeCountV >= 3)
             {
-                if (hitsL[j].collider.GetComponent<SpriteRenderer>().sprite != nowSprite)
-                {
-                    break;
-                }
-                horCount++;
-            }
-            for (int k = 0; k < hitsU.Length; k++)
-            {
-                if (hitsU[k].collider.GetComponent<SpriteRenderer>().sprite != nowSprite)
-                {
-                    break;
-                }
-                verCount++;
-            }
-            for (int l = 0; l < hitsD.Length; l++)
-            {
-                if (hitsD[l].collider.GetComponent<SpriteRenderer>().sprite != nowSprite)
-                {
-                    break;
-                }
-                verCount++;
-            }
-            horCount--;
-            verCount--;
-
-            if (horCount >= 3)
-            {
-                foreach (RaycastHit2D hit in hitsR)
-                {
-                    if (hit.collider.GetComponent<SpriteRenderer>().sprite == nowSprite)
-                    //如果碰到的圖案跟自己一樣
-                    {
-                        hit.collider.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
-                        //讓球消失
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                foreach (RaycastHit2D hit in hitsL)
-                {
-                    if (hit.collider.GetComponent<SpriteRenderer>().sprite == nowSprite)
-                    //如果碰到的圖案跟自己一樣
-                    {
-                        hit.collider.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
-                        //讓球消失
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
-            if (verCount >= 3)
-            {
-                foreach (RaycastHit2D hit in hitsU)
-                {
-                    if (hit.collider.GetComponent<SpriteRenderer>().sprite == nowSprite)
-                    //如果碰到的圖案跟自己一樣
-                    {
-                        hit.collider.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
-                        //讓球消失
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                foreach (RaycastHit2D hit in hitsD)
-                {
-                    if (hit.collider.GetComponent<SpriteRenderer>().sprite == nowSprite)
-                    //如果碰到的圖案跟自己一樣
-                    {
-                        hit.collider.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0f);
-                        //讓球消失
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+                AllBall[i].GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
             }
         }
+        removeBall();
     }
-    private void FallSystem()
+    private void removeBall()
     {
-        foreach(GameObject EachBall in BallNumber)
-        // 將被消除的珠子清空
+        foreach(GameObject ball in AllBall)
         {
-            if (EachBall.GetComponent<SpriteRenderer>().color == new Color(1, 1, 1, 0f))
+            if(ball.GetComponent<SpriteRenderer>().color == new Color(1, 1, 1, 0.5f))
             {
-                EachBall.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
-                EachBall.GetComponent<SpriteRenderer>().sprite = null;
-            }
-        }
-        for(int i = BallNumber.Count - 1; i > 5; i--)
-        // 橫向珠子掉落到底
-        {
-            if (BallNumber[i].GetComponent<SpriteRenderer>().sprite == null
-                && BallNumber[i-6].GetComponent<SpriteRenderer>().sprite != null)
-            {
-                BallNumber[i].GetComponent<SpriteRenderer>().sprite = BallNumber[i-6].GetComponent<SpriteRenderer>().sprite;
-                BallNumber[i - 6].GetComponent<SpriteRenderer>().sprite = null;
-            }
-        }
-        for(int i = 6; i < BallNumber.Count - 6; i++)
-        // 直向珠子掉落到底
-        {
-            if (BallNumber[i + 6].GetComponent<SpriteRenderer>().sprite == null
-                && BallNumber[i].GetComponent<SpriteRenderer>().sprite != null)
-            {
-                BallNumber[i + 6].GetComponent<SpriteRenderer>().sprite = BallNumber[i].GetComponent<SpriteRenderer>().sprite;
-                BallNumber[i].GetComponent<SpriteRenderer>().sprite = null;
-            }
-        }
-        foreach (GameObject EachBall in BallNumber)
-        // 被消除的重新生成
-        {
-            if (EachBall.GetComponent<SpriteRenderer>().sprite == null)
-            {
-                ChangeSprite(EachBall);
+                ball.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1f);
+                ball.GetComponent<SpriteRenderer>().sprite = null;
             }
         }
     }
