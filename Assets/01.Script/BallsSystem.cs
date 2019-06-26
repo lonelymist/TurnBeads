@@ -130,15 +130,12 @@ public class BallsSystem : MonoBehaviour
     }
     private void FallSystem()
     {
-        for(j = 0; j < 4; j++)
+        for (i = AllBall.Count - 1; i >= 6; i--)
         {
-            for (i = AllBall.Count - 1; i >= 6; i--)
+            if (AllBall[i].GetComponent<SpriteRenderer>().sprite == null)
             {
-                if (AllBall[i].GetComponent<SpriteRenderer>().sprite == null)
-                {
-                    AllBall[i].GetComponent<SpriteRenderer>().sprite = AllBall[i - 6].GetComponent<SpriteRenderer>().sprite;
-                    AllBall[i - 6].GetComponent<SpriteRenderer>().sprite = null;
-                }
+                AllBall[i].GetComponent<SpriteRenderer>().sprite = AllBall[i - 6].GetComponent<SpriteRenderer>().sprite;
+                AllBall[i - 6].GetComponent<SpriteRenderer>().sprite = null;
             }
         }
     }
@@ -157,15 +154,27 @@ public class BallsSystem : MonoBehaviour
     {
         if (startRemove)
         {
-            if(Time.time - timer > 0.5)
+            if (Time.time - timer > 0.5)
             {
                 removeBall();
-            }
-            if (Time.time - timer > 1)
+            } 
+            if (Time.time - timer > 1 && Time.time - timer < 1.03)
             {
                 FallSystem();
             }
-            if (Time.time - timer > 1.5)
+            if (Time.time - timer > 1.5 && Time.time - timer < 1.53)
+            {
+                FallSystem();
+            }
+            if (Time.time - timer > 2 && Time.time - timer < 2.03)
+            {
+                FallSystem();
+            }
+            if (Time.time - timer > 2.5 && Time.time - timer < 2.53)
+            {
+                FallSystem();
+            }
+            if (Time.time - timer > 3)
             {
                 startRemove = false;
                 ReCreate();
